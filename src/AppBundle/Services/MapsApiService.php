@@ -122,7 +122,7 @@ class MapsApiService {
         }
 
 
-        if(isset($distance['max_distance'][$distance]) && !empty($distance['max_distance'][$distance])) {
+        if(isset($data['max_distance'][$distance]) && !empty($data['max_distance'][$distance])) {
             usort($data['max_distance'][$distance], function($a, $b) {
                 return $a['distance'] - $b['distance'];
             });
