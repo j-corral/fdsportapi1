@@ -1,0 +1,96 @@
+auth:
+    error:
+        invalidCredentials: Invalid Credentials
+
+company:
+    error:
+        notFound: Company Not Found
+    address:
+        error:
+            notFound: Company Address Not Found
+    group:
+        error:
+            notFound: Company Group Not Found
+
+contact:
+    error:
+        notFound: Contact Not Found
+    email:
+        error:
+            notFound: Contact Email Not Found
+    phone:
+        error:
+            notFound: Contact Phone Not Found
+    group:
+        error:
+            notFound: Contact Group Not Found
+
+minute:
+    error:
+        notFound: Meeting Minute Not Found
+
+permission:
+    error:
+        notFound: Permission Not Found
+
+reminder:
+    error:
+        notFound: Reminder Not Found
+
+role:
+    error:
+        notFound: Role Not Found
+
+user:
+    error:
+        notFound: User Not Found
+
+error:
+    accessdenied: Acces denied
+
+business:
+    error:
+        notFound: Business not found
+
+businessclocking:
+    error:
+        notFound: BusinessClocking not found
+
+absence:
+    error:
+        onlyrttwithhour: Only extra day off can be set in hours
+
+month:
+    01: January
+    02: February
+    03: March
+    04: April
+    05: May
+    06: June
+    07: July
+    08: August
+    09: September
+    10: October
+    11: November
+    12: December
+
+notification:
+    error:
+        notFound: Notification not found
+    clockingvalidation:
+        validate: Clocking validated
+        refused: Clocking refused
+        own:
+            refused: Our clocking for __MONTH__ __YEAR__ have been refused (reason __REASON__).
+        subordinate:
+            validate: Clocking of __TRI__ have been validated for __MONTH__ __YEAR__.
+    absence:
+        requested:
+            title: New Absence Requested
+            content: A new absence has been requested by __TRI__.
+            mail: New absence request by __TRI__ (from __STARTDATE__ to __ENDDATE__).
+        refused:
+            title: Request for absence refused
+            content: Our request for absence has been refused.
+            mail: Absence requested refused (from __STARTDATE__ to __ENDDATE__).
+    business: __REF__ Tender not finalized and deadline in approach.

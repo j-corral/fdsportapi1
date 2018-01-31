@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="OmniProAPI" default="build">
+  <property name="workspace" value="${basedir}" />
+  <property name="sourcedir" value="${basedir}/src" />
+  <property name="builddir" value="${workspace}/app/build" />
+
+  <target name="build"
+  depends="prepare,vendors,clear-cache,phpunit,format-clover"/>
+  <target name="clean" description="Cleanup build artifacts">
+    <delete dir="${builddir}/api"/>
+    <delete dir="${builddir}/code-browser"/>
+    <delete dir="${builddir}/coverage"/>
+    <delete dir="${builddir}/logs"/>
+    <delete dir="${builddir}/docs/*"/>
+  </target>
+
+  <target name="prepare" depends="clean" description="Prepare for build">
+    <mkdir dir="${builddir}/api"/>
+    <mkdir dir="${builddir}/code-browser"/>
+    <mkdir dir="${builddir}/coverage"/>
+    <mkdir dir="${builddir}/logs"/>
+  </target>
+
+  <target name="paratest" description="Run unit tests with Para Test">
+    <exec executable="php" failonerror="true">
+		<arg path="${basedir}/vendor/brianium/paratest/bin/paratest" />
+		<arg value="-p2" />
+		<arg value="--coverage-clover" />
+		<arg value="coverage/clover.xml" />
+    </exec>
+  </target>
+  
+  <target name="phpunit" description="Run unit tests">
+    <exec executable="${basedir}/vendor/bin/phpunit" failonerror="true">
+		<arg value="--coverage-clover" />
+		<arg value="coverage/clover.xml" />
+    </exec>
+  </target>
+
+  <target name="vendors" description="Update vendors">
+    <exec executable="php" failonerror="true">
+        <arg value="${basedir}/tools/composer.phar" />
+        <arg value="install" />
+    </exec>
+  </target>
+  
+  <target name="format-clover" description="Format Clover to be Compatible with Sonar">
+    <exec executable="sed" failonerror="true">
+        <arg value="-i" />
+		<arg value="s/file name=&quot;\(.*\)&quot;/file path=&quot;\1&quot; name=&quot;\1&quot;/g" />
+		<arg value="${basedir}/coverage/clover.xml" />
+    </exec>
+  </target>
+  
+  <target name="clear-cache" description="Clean Test Environnment">
+    <exec executable="php" failonerror="true">
+        <arg value="${basedir}/bin/console" />
+        <arg value="cache:clear" />
+		<arg value="--env=test" />
+    </exec>
+  </target>
+</project>

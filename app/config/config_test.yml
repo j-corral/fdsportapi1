@@ -1,0 +1,32 @@
+imports:
+    - { resource: config_dev.yml }
+
+parameters:
+    doctrine.dbal.connection_factory.class: Liip\FunctionalTestBundle\Factory\ConnectionFactory
+
+framework:
+    test: ~
+    session:
+        storage_id: session.storage.mock_file
+    profiler:
+        collect: false
+
+web_profiler:
+    toolbar: false
+    intercept_redirects: false
+
+swiftmailer:
+    disable_delivery: true
+
+doctrine:
+    dbal:
+        default_connection: default
+        connections:
+            default:
+                driver:  pdo_sqlite
+                user:    test
+                path:    "%kernel.cache_dir%/__DBNAME__.db"
+                memory: false
+                
+liip_functional_test:
+    cache_sqlite_db: true

@@ -1,0 +1,96 @@
+auth:
+    error:
+        invalidCredentials: Identifiant ou Mot de Passe Incorrect
+
+company:
+    error:
+        notFound: Société Introuvable
+    address:
+        error:
+            notFound: Adresse de Société Introuvable
+    group:
+        error:
+            notFound: Groupe de Société Introuvable
+
+contact:
+    error:
+        notFound: Contact Introuvable
+    email:
+        error:
+            notFound: Email de Contact Introuvable
+    phone:
+        error:
+            notFound: Téléphone de Contact Introuvable
+    group:
+        error:
+            notFound: Groupe de Contact Introuvable
+
+minute:
+    error:
+        notFound: Compte-Rendu Introuvable
+
+permission:
+    error:
+        notFound: Permission Introuvable
+
+reminder:
+    error:
+        notFound: Rappel Introuvable
+
+role:
+    error:
+        notFound: Role Introuvable
+
+user:
+    error:
+        notFound: Utilisateur Introuvable
+
+error:
+    accessdenied: Accès Introuvable
+
+business:
+    error:
+        notFound: Affaire Introuvable
+
+businessclocking:
+    error:
+        notFound: Pointage Introuvable
+
+absence:
+    error:
+        onlyrttwithhour: Uniquement les RTT peuvent être posé en heures
+
+month:
+    01: Janvier
+    02: Février
+    03: Mars
+    04: Avril
+    05: Mai
+    06: Juin
+    07: Juillet
+    08: Août
+    09: Septembre
+    10: Octobre
+    11: Novembre
+    12: Decembre
+
+notification:
+    error:
+        notFound: Notification Introuvable
+    clockingvalidation:
+        validate: Pointages Validés
+        refused: Pointages Refusés
+        own:
+            refused: Vos pointages de __MONTH__ __YEAR__ ont été refusés (raison __REASON__).
+        subordinate:
+            validate: Les pointages de __TRI__ ont été validés pour __MONTH__ __YEAR__.
+    absence:
+        requested:
+            title: Nouvelle Demande d'Absence
+            content: Une nouvelle demande d'absence a été émise par __TRI__.
+            mail: Nouvelle demande d'absence par __TRI__ (du __STARTDATE__ au __ENDDATE__).
+        refused:
+            title: Demande d'Absence Refusée
+            content: Votre demande d'absence a été refusée.
+            mail: Demande d'absence refusée (du __STARTDATE__ au __ENDDATE__).
+    business: __REF__ Appel d'offre non finalisé et date limite en approche.

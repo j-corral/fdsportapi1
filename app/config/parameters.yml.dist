@@ -1,0 +1,13 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_host: 127.0.0.1
+    database_port: null
+    database_name: traveilapi
+    database_user: root
+    database_password: null
+    mailer_transport: null
+    mailer_host: null
+    mailer_auth_mode: null
+    mailer_user: null
+    mailer_password: null
+    secret: 4w3s0m3s3cr370f7h3d347h

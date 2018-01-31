@@ -1,0 +1,10 @@
+user:
+    email.already_use: 'This email is already use.'
+    password.min: 'This password is too short. It should have {{ limit }} characters or more.'
+    password.max: 'This password is too long. It should have {{ limit }} characters or less.'
+    firstname.not_blank: 'The firstname must not be blank.'
+    lastname.not_blank: 'The lastname must not be blank.'
+    email.not_blank: 'The email must not be blank.'
+    email.not_valid: 'The email must be a valid email (i.e : name.lastname@company.com).'
+    username.onlychar: 'The username must contain only character (a-z) or number (0-9). No special character are allowed.'
+    username.not_blank: The username must not be blank.
