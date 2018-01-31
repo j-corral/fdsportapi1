@@ -3,7 +3,7 @@
 namespace AppBundle\Services;
 
 /**
-* Service that provide acces to the Google Maps API
+* Service that provide access to the Google Maps API
 */
 class MapsApiService {
 
@@ -54,6 +54,7 @@ class MapsApiService {
     /**
      * Exec request URL
      * @return mixed
+     * @throws \Exception
      */
     private function exec() {
         $curl = curl_init($this->request);
@@ -75,6 +76,7 @@ class MapsApiService {
      * @param $origin
      * @param $destinations
      * @return mixed
+     * @throws \Exception
      */
     public function getDistanceMatrix($origin, $destinations) {
 
@@ -98,6 +100,7 @@ class MapsApiService {
      * @param $destinations
      * @param int $distance
      * @return array
+     * @throws \Exception
      */
     public function getCitiesByMaxDistance($origin, $destinations, $distance = 50000) {
 
@@ -117,6 +120,11 @@ class MapsApiService {
                 }
             }
         }
+
+
+        usort($data['max_distance'][$distance], function($a, $b) {
+            return $a['distance'] - $b['distance'];
+        });
 
         return $data;
     }
