@@ -11,3 +11,4 @@ parameters:
     mailer_user: null
     mailer_password: null
     secret: 4w3s0m3s3cr370f7h3d347h
+    googleApiKey: AIzaSyA_tZFQn3YyWbgIu8QJkAeDFQw6RQ5qyDk

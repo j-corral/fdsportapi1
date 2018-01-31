@@ -3,7 +3,9 @@
 namespace AppBundle\Controller\City;
 
 // Required dependencies for Controller and Annotations
+use FOS\RestBundle\Controller\Annotations\QueryParam;
 use \AppBundle\Controller\ControllerBase;
+use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -20,19 +22,37 @@ class CityController extends ControllerBase {
     /**
      * @ApiDoc(
      *      resource=true, section="City",
-     *      description="Get the nearest city.",
+     *      description="Get nearby cities.",
      *      output= { "class"="", "collection"=false, "groups"={"base"} }
      * )
      *
      * @Rest\View(serializerGroups={"base"})
-     * @Rest\Get("/city")
+     * @Rest\Get("/city/{city}")
+     * @QueryParam(name="distance", requirements="\d+", default="50000", description="Max distance to search for, in meters")
+     * @param Request $request
+     * @param ParamFetcher $paramFetcher
+     * @return array|mixed
      */
-    public function getCityAction(Request $request) {
+    public function getNearbyCitiesAction(Request $request, ParamFetcher $paramFetcher) {
 
-        // TODO : Renommer la fonction correctement
-        // TODO : Mettre ici le code qui permet de récupérer la distance et tout le tralalala
+        $city = $request->get('city');
 
-        return true;
+        $distance = $paramFetcher->get('distance');
+
+        $destinations = array(
+            "Lille, France",
+            "Strasbourg, France",
+            "Paris, France",
+            "Nantes, France",
+            "Lyon, France",
+            "Bordeaux, France",
+            "Marseille, France",
+            "Aubagne, France",
+        );
+
+        $maps = new MAPSAPI($this->getParameter('googleApiKey'));
+
+        return $maps->getCitiesByMaxDistance($city, $destinations, $distance);
     }
 
     /**
