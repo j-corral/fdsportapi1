@@ -50,9 +50,10 @@ class CityController extends ControllerBase {
             "Aubagne, France",
         );
 
-        $maps = new MAPSAPI($this->getParameter('googleApiKey'));
+        // $maps = new MAPSAPI($this->getParameter('googleApiKey'));
+        //return $maps->getCitiesByMaxDistance($city, $destinations, $distance);
 
-        return $maps->getCitiesByMaxDistance($city, $destinations, $distance);
+        return $this->get('maps_api')->getCitiesByMaxDistance($city,$destinations,$distance);
     }
 
     /**

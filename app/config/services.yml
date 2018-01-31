@@ -48,3 +48,8 @@ services:
     security_context:
         class: AppBundle\Security\SecurityContext
         arguments: ["@security.token_storage","@translator"]
+
+    # Email
+    maps_api:
+        class: AppBundle\Services\MapsApiService
+        arguments: [%googleApiKey%]
