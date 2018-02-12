@@ -10,3 +10,28 @@ nelmio-api-doc:
 city:
     type:     rest
     resource: AppBundle\Controller\City\CityController
+
+# Product
+product:
+    type:     rest
+    resource: AppBundle\Controller\Product\ProductController
+
+# Axe
+axe:
+    type:     rest
+    resource: AppBundle\Controller\Axe\AxeController
+
+# Click
+click:
+    type:     rest
+    resource: AppBundle\Controller\Click\ClickController
+
+# Ticket
+ticket:
+    type:     rest
+    resource: AppBundle\Controller\Ticket\TicketController
+
+# User
+user:
+    type:     rest
+    resource: AppBundle\Controller\User\UserController
