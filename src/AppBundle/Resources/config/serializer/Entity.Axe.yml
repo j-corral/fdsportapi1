@@ -1,0 +1,19 @@
+AppBundle\Entity\Axe:
+    exclusion_policy: none
+    properties:
+        axe_id:
+            groups: ['axe', 'product']
+        male:
+            groups: ['axe', 'product']
+        female:
+            groups: ['axe', 'product']
+        brand:
+            groups: ['axe', 'product']
+        age:
+            groups: ['axe', 'product']
+        city:
+            groups: ['axe', 'product']
+        csp:
+            groups: ['axe', 'product']
+        sport:
+            groups: ['axe', 'product']
