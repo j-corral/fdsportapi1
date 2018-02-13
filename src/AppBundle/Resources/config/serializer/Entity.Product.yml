@@ -2,12 +2,12 @@ AppBundle\Entity\Product:
     exclusion_policy: none
     properties:
         product_id:
-            groups: ['product']
+            groups: ['product', 'click']
         description:
-            groups: ['product']
+            groups: ['product', 'click']
         is_fixed:
-            groups: ['product']
+            groups: ['product', 'click']
         price:
-            groups: ['product']
+            groups: ['product', 'click']
         axe:
-            groups: ['product']
+            groups: ['product', 'click']

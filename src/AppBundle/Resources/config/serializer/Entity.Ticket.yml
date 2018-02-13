@@ -1,0 +1,19 @@
+AppBundle\Entity\Ticket:
+    exclusion_policy: none
+    properties:
+        ticket_id:
+            groups: ['ticket', 'click']
+        axe:
+            groups: ['ticket', 'click']
+        home:
+            groups: ['ticket', 'click']
+        visitor:
+            groups: ['ticket', 'click']
+        address:
+            groups: ['ticket', 'click']
+        sport:
+            groups: ['ticket', 'click']
+        category:
+            groups: ['ticket', 'click']
+        price:
+            groups: ['ticket', 'click']

@@ -39,5 +39,5 @@ class User
      * @ORM\OneToOne(targetEntity="Axe")
      * @ORM\JoinColumn(name="axe_id", referencedColumnName="axe_id")
      */
-    private $axe_id;
+    private $axe;
 }

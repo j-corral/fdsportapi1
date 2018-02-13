@@ -2,18 +2,18 @@ AppBundle\Entity\Axe:
     exclusion_policy: none
     properties:
         axe_id:
-            groups: ['axe', 'product']
+            groups: ['axe', 'product', 'ticket', 'user', 'click']
         male:
-            groups: ['axe', 'product']
+            groups: ['axe', 'product', 'ticket', 'user', 'click']
         female:
-            groups: ['axe', 'product']
+            groups: ['axe', 'product', 'ticket', 'user', 'click']
         brand:
-            groups: ['axe', 'product']
+            groups: ['axe', 'product', 'ticket', 'user', 'click']
         age:
-            groups: ['axe', 'product']
+            groups: ['axe', 'product', 'ticket', 'user', 'click']
         city:
-            groups: ['axe', 'product']
+            groups: ['axe', 'product', 'ticket', 'user', 'click']
         csp:
-            groups: ['axe', 'product']
+            groups: ['axe', 'product', 'ticket', 'user', 'click']
         sport:
-            groups: ['axe', 'product']
+            groups: ['axe', 'product', 'ticket', 'user', 'click']

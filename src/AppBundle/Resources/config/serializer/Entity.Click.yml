@@ -1,0 +1,11 @@
+AppBundle\Entity\Click:
+    exclusion_policy: none
+    properties:
+        click_id:
+            groups: ['click']
+        user:
+            groups: ['click']
+        product:
+            groups: ['click']
+        ticket:
+            groups: ['click']

@@ -9,6 +9,7 @@
 namespace AppBundle\Controller\Ticket;
 
 // Required dependencies for Controller and Annotations
+use AppBundle\Entity\Ticket;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use \AppBundle\Controller\ControllerBase;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -26,11 +27,11 @@ class TicketController extends ControllerBase {
      * @ApiDoc(
      *      resource=true, section="Ticket",
      *      description="Get the Tickets",
-     *      output= { "class"=Ticket::class, "collection"=false, "groups"={"base"} }
+     *      output= { "class"=Ticket::class, "collection"=true, "groups"={"base", "ticket"} }
      * )
      *
-     * @Rest\View(serializerGroups={"base"})
-     * @Rest\Get("/tickets/{TicketId}")
+     * @Rest\View(serializerGroups={"base", "ticket"})
+     * @Rest\Get("/tickets")
      * @param Request $request
      * @return array
      */
@@ -45,6 +46,32 @@ class TicketController extends ControllerBase {
 
 
         return $tickets;
+    }
+
+
+    /**
+     * @ApiDoc(
+     *      resource=true, section="Ticket",
+     *      description="Get ticket by id",
+     *      output= { "class"=Ticket::class, "collection"=false, "groups"={"base", "ticket"} }
+     * )
+     *
+     * @Rest\View(serializerGroups={"base", "ticket"})
+     * @Rest\Get("/tickets/{ticketId}")
+     * @param Request $request
+     *
+     * @return object
+     */
+    public function getTicketByIdAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+
+        $ticket = $em->getRepository(Ticket::class)->find($request->get('ticketId'));
+
+        if (empty($ticket)) {
+            throw $this->getTicketNotFoundException();
+        }
+
+        return $ticket;
     }
 
 

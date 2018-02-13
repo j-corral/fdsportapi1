@@ -9,6 +9,7 @@
 namespace AppBundle\Controller\User;
 
 // Required dependencies for Controller and Annotations
+use AppBundle\Entity\User;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use \AppBundle\Controller\ControllerBase;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -26,11 +27,11 @@ class UserController extends ControllerBase {
      * @ApiDoc(
      *      resource=true, section="User",
      *      description="Get the Users",
-     *      output= { "class"=User::class, "collection"=false, "groups"={"base"} }
+     *      output= { "class"=User::class, "collection"=false, "groups"={"base", "user"} }
      * )
      *
-     * @Rest\View(serializerGroups={"base"})
-     * @Rest\Get("/users/{UserId}")
+     * @Rest\View(serializerGroups={"base", "user"})
+     * @Rest\Get("/users")
      * @param Request $request
      * @return array
      */
@@ -45,6 +46,32 @@ class UserController extends ControllerBase {
 
 
         return $users;
+    }
+
+
+    /**
+     * @ApiDoc(
+     *      resource=true, section="User",
+     *      description="Get user by id",
+     *      output= { "class"=User::class, "collection"=false, "groups"={"base", "user"} }
+     * )
+     *
+     * @Rest\View(serializerGroups={"base", "user"})
+     * @Rest\Get("/users/{userId}")
+     * @param Request $request
+     *
+     * @return object
+     */
+    public function getUserByIdAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+
+        $user = $em->getRepository(User::class)->find($request->get('userId'));
+
+        if (empty($user)) {
+            throw $this->getUserNotFoundException();
+        }
+
+        return $user;
     }
 
 

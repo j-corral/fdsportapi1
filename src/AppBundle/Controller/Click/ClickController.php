@@ -9,6 +9,7 @@
 namespace AppBundle\Controller\Click;
 
 // Required dependencies for Controller and Annotations
+use AppBundle\Entity\Click;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use \AppBundle\Controller\ControllerBase;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -27,11 +28,11 @@ class ClickController extends ControllerBase {
      * @ApiDoc(
      *      resource=true, section="Click",
      *      description="Get the Clicks",
-     *      output= { "class"=Click::class, "collection"=false, "groups"={"base"} }
+     *      output= { "class"=Click::class, "collection"=false, "groups"={"base", "click"} }
      * )
      *
-     * @Rest\View(serializerGroups={"base"})
-     * @Rest\Get("/clicks/{ClickId}")
+     * @Rest\View(serializerGroups={"base", "click"})
+     * @Rest\Get("/clicks")
      * @param Request $request
      * @return array
      */
@@ -46,6 +47,32 @@ class ClickController extends ControllerBase {
 
 
         return $clicks;
+    }
+
+
+    /**
+     * @ApiDoc(
+     *      resource=true, section="Click",
+     *      description="Get click by id",
+     *      output= { "class"=Click::class, "collection"=false, "groups"={"base", "click"} }
+     * )
+     *
+     * @Rest\View(serializerGroups={"base", "click"})
+     * @Rest\Get("/clicks/{clickId}")
+     * @param Request $request
+     *
+     * @return object
+     */
+    public function getClickByIdAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+
+        $click = $em->getRepository(Click::class)->find($request->get('clickId'));
+
+        if (empty($click)) {
+            throw $this->getClickNotFoundException();
+        }
+
+        return $click;
     }
 
 
