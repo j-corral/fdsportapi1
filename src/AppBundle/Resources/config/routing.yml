@@ -55,3 +55,13 @@ cookie:
 product_type:
     type:     rest
     resource: AppBundle\Controller\ProductType\ProductTypeController
+
+# Media
+media:
+    type:     rest
+    resource: AppBundle\Controller\Media\MediaController
+
+# MediaType
+media_type:
+    type:     rest
+    resource: AppBundle\Controller\MediaType\MediaTypeController

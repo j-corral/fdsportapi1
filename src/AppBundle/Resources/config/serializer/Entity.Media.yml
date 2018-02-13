@@ -1,0 +1,11 @@
+AppBundle\Entity\Media:
+    exclusion_policy: none
+    properties:
+        media_id:
+            groups: ['media', 'ticket', 'product']
+        name:
+            groups: ['media', 'ticket', 'product']
+        url:
+            groups: ['media', 'ticket', 'product']
+        type:
+            groups: ['media', 'ticket', 'product']

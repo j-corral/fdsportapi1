@@ -17,3 +17,5 @@ AppBundle\Entity\Ticket:
             groups: ['ticket', 'click']
         price:
             groups: ['ticket', 'click']
+        featured:
+            groups: ['ticket', 'click']

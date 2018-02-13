@@ -1,0 +1,9 @@
+AppBundle\Entity\MediaType:
+    exclusion_policy: none
+    properties:
+        media_type_id:
+            groups: ['media_type', 'media', 'product', 'ticket']
+        name:
+            groups: ['media_type', 'media', 'product', 'ticket']
+        description:
+            groups: ['media_type', 'media', 'product', 'ticket']

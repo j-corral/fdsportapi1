@@ -13,3 +13,5 @@ AppBundle\Entity\Product:
             groups: ['product', 'click']
         axe:
             groups: ['product', 'click']
+        featured:
+            groups: ['product', 'click']

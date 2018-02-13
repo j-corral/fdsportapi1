@@ -53,6 +53,12 @@ class Product
     private $axe;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Media")
+     * @ORM\JoinColumn(name="media_id", referencedColumnName="media_id")
+     */
+    private $featured;
+
+    /**
      * @return mixed
      */
     public function getProductId()

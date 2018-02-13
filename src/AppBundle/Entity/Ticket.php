@@ -61,4 +61,10 @@ class Ticket
      * @ORM\Column(type="float")
      */
     private $price;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Media")
+     * @ORM\JoinColumn(name="media_id", referencedColumnName="media_id")
+     */
+    private $featured;
 }
