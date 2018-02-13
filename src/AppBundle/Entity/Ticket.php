@@ -47,7 +47,8 @@ class Ticket
     private $address;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\ManyToOne(targetEntity="Sport")
+     * @ORM\JoinColumn(name="sport_id", referencedColumnName="sport_id")
      */
     private $sport;
 

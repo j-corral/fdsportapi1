@@ -25,6 +25,11 @@ class Product
      */
     private $product_id;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="ProductType")
+     * @ORM\JoinColumn(name="product_type_id", referencedColumnName="product_type_id")
+     */
+    private $type;
 
     /**
      * @ORM\Column(type="text")

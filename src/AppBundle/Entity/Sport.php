@@ -13,9 +13,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="user")
+ * @ORM\Table(name="sport")
  */
-class User
+class Sport
 {
 
     /**
@@ -23,27 +23,21 @@ class User
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $user_id;
-
-    /**
-     * @ORM\OneToOne(targetEntity="Cookie")
-     * @ORM\JoinColumn(name="cookie_id", referencedColumnName="cookie_id")
-     */
-    private $cookie;
+    private $sport_id;
 
     /**
      * @ORM\Column(type="string")
      */
-    private $firstname;
+    private $name;
 
     /**
      * @ORM\Column(type="string")
      */
-    private $lastname;
+    private $description;
+
 
     /**
-     * @ORM\OneToOne(targetEntity="Axe")
-     * @ORM\JoinColumn(name="axe_id", referencedColumnName="axe_id")
+     * @ORM\Column(type="string")
      */
-    private $axe;
+    private $color;
 }

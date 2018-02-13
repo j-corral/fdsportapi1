@@ -1,0 +1,11 @@
+AppBundle\Entity\Sport:
+    exclusion_policy: none
+    properties:
+        sport_id:
+            groups: ['sport', 'ticket']
+        name:
+            groups: ['sport', 'ticket']
+        description:
+            groups: ['sport', 'ticket']
+        color:
+            groups: ['sport', 'ticket']

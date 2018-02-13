@@ -35,3 +35,23 @@ ticket:
 user:
     type:     rest
     resource: AppBundle\Controller\User\UserController
+
+# Sport
+sport:
+    type:     rest
+    resource: AppBundle\Controller\Sport\SportController
+
+# Brand
+brand:
+    type:     rest
+    resource: AppBundle\Controller\Brand\BrandController
+
+# Cookie
+cookie:
+    type:     rest
+    resource: AppBundle\Controller\Cookie\CookieController
+
+# ProductType
+product_type:
+    type:     rest
+    resource: AppBundle\Controller\ProductType\ProductTypeController

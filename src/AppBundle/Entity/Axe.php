@@ -36,7 +36,8 @@ class Axe
     private $female;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\ManyToOne(targetEntity="Brand")
+     * @ORM\JoinColumn(name="brand_id", referencedColumnName="brand_id")
      */
     private $brand;
 
@@ -56,7 +57,8 @@ class Axe
     private $csp;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\ManyToOne(targetEntity="Sport")
+     * @ORM\JoinColumn(name="sport_id", referencedColumnName="sport_id")
      */
     private $sport;
 

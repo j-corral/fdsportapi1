@@ -3,6 +3,8 @@ AppBundle\Entity\Product:
     properties:
         product_id:
             groups: ['product', 'click']
+        type:
+            groups: ['product', 'click']
         description:
             groups: ['product', 'click']
         is_fixed:

@@ -1,0 +1,7 @@
+AppBundle\Entity\Cookie:
+    exclusion_policy: none
+    properties:
+        cookie_id:
+            groups: ['cookie', 'user']
+        name:
+            groups: ['cookie', 'user']
