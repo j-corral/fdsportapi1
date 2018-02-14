@@ -67,4 +67,14 @@ class Ticket
      * @ORM\JoinColumn(name="media_id", referencedColumnName="media_id")
      */
     private $featured;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $intro;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $date;
 }

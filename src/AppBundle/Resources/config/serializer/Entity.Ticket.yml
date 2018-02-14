@@ -19,3 +19,7 @@ AppBundle\Entity\Ticket:
             groups: ['ticket', 'click']
         featured:
             groups: ['ticket', 'click']
+        intro:
+            groups: ['ticket', 'click']
+        date:
+            groups: ['ticket', 'click']

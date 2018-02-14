@@ -59,6 +59,17 @@ class Product
     private $featured;
 
     /**
+     * @ORM\Column(type="string")
+     */
+    private $name;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $intro;
+
+
+    /**
      * @return mixed
      */
     public function getProductId()
