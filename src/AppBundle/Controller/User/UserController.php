@@ -112,6 +112,7 @@ class UserController extends ControllerBase {
 
         $axe = new Axe();
         $user->setAxe($axe);
+        $user->
 
         $em->persist($user);
         $em->flush();

@@ -10,9 +10,11 @@ namespace AppBundle\Controller\Axe;
 
 // Required dependencies for Controller and Annotations
 use AppBundle\Entity\Axe;
+use AppBundle\Entity\User;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use \AppBundle\Controller\ControllerBase;
 use FOS\RestBundle\Request\ParamFetcher;
+use References\Fixture\ODM\MongoDB\Product;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -72,12 +74,14 @@ class AxeController extends ControllerBase {
             throw $this->getAxeNotFoundException();
         }
 
-
         return $axe;
     }
 
     private function getAxeNotFoundException() {
         return new NotFoundHttpException("No axes found !");
     }
+
+
+
 
 }

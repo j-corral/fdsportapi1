@@ -32,13 +32,13 @@ class Click
     private $user;
 
     /**
-     * @ORM\OneToOne(targetEntity="Product")
+     * @ORM\ManyToOne(targetEntity="Product")
      * @ORM\JoinColumn(name="product_id", referencedColumnName="product_id")
      */
     private $product;
 
     /**
-     * @ORM\OneToOne(targetEntity="Ticket")
+     * @ORM\ManyToOne(targetEntity="Ticket")
      * @ORM\JoinColumn(name="ticket_id", referencedColumnName="ticket_id")
      */
     private $ticket;
