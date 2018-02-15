@@ -9,7 +9,10 @@
 namespace AppBundle\Controller\User;
 
 // Required dependencies for Controller and Annotations
+use AppBundle\Entity\Axe;
+use AppBundle\Entity\Cookie;
 use AppBundle\Entity\User;
+use AppBundle\Form\Type\User\UserType;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use \AppBundle\Controller\ControllerBase;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -70,6 +73,63 @@ class UserController extends ControllerBase {
         if (empty($user)) {
             throw $this->getUserNotFoundException();
         }
+
+        return $user;
+    }
+
+
+    /**
+     * @ApiDoc(
+     *      resource=true, section="User",
+     *      description="Create new user",
+     *      output= { "class"=User::class, "collection"=false, "groups"={"base", "user"} }
+     * )
+     *
+     * @Rest\View(serializerGroups={"base", "user"})
+     * @Rest\Post("/users/create")
+     * @param Request $request
+     *
+     * @return object
+     * @throws \Exception
+     */
+    public function postCreateUserAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+
+        $data = $request->request->all();
+
+        if(empty($data) || !isset($data['cookie']) || !isset($data['cookie']['name']) || empty($data['cookie']['name'])) {
+            throw new \Exception('Cookie name is empty !');
+        }
+
+        $user = new User();
+        $user->setFirstname('user_' . $data['cookie']['name']);
+
+
+        $cookie = new Cookie();
+        $cookie->setName($data['cookie']['name']);
+        $user->setCookie($cookie);
+
+
+        $axe = new Axe();
+        $user->setAxe($axe);
+
+        $em->persist($user);
+        $em->flush();
+
+        /*$form = $this->createForm(UserType::class, $user);
+
+        $form->submit($request->headers);
+
+
+        if ($form->isValid()) {
+
+
+
+        } else {
+            return $form;
+        }*/
+
+
 
         return $user;
     }

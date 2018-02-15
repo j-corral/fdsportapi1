@@ -28,12 +28,12 @@ class Axe
     /**
      * @ORM\Column(type="float")
      */
-    private $male;
+    private $male = 0;
 
     /**
      * @ORM\Column(type="float")
      */
-    private $female;
+    private $female = 0;
 
     /**
      * @ORM\ManyToOne(targetEntity="Brand")
@@ -44,17 +44,17 @@ class Axe
     /**
      * @ORM\Column(type="float")
      */
-    private $age;
+    private $age = 0;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     private $city;
 
     /**
      * @ORM\Column(type="float")
      */
-    private $csp;
+    private $csp = 0;
 
     /**
      * @ORM\ManyToOne(targetEntity="Sport")

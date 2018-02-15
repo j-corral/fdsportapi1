@@ -26,7 +26,7 @@ class User
     private $user_id;
 
     /**
-     * @ORM\OneToOne(targetEntity="Cookie")
+     * @ORM\OneToOne(targetEntity="Cookie", cascade={"persist"})
      * @ORM\JoinColumn(name="cookie_id", referencedColumnName="cookie_id")
      */
     private $cookie;
@@ -37,12 +37,12 @@ class User
     private $firstname;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     private $lastname;
 
     /**
-     * @ORM\OneToOne(targetEntity="Axe")
+     * @ORM\OneToOne(targetEntity="Axe", cascade={"persist"})
      * @ORM\JoinColumn(name="axe_id", referencedColumnName="axe_id")
      */
     private $axe;
