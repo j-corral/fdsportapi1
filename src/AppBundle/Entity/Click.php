@@ -43,4 +43,61 @@ class Click
      */
     private $ticket;
 
+    /**
+     * @return mixed
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param mixed $user
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProduct()
+    {
+        return $this->product;
+    }
+
+    /**
+     * @param mixed $product
+     */
+    public function setProduct($product)
+    {
+        $this->product = $product;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTicket()
+    {
+        return $this->ticket;
+    }
+
+    /**
+     * @param mixed $ticket
+     */
+    public function setTicket($ticket)
+    {
+        $this->ticket = $ticket;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getClickId()
+    {
+        return $this->click_id;
+    }
+
+
 }

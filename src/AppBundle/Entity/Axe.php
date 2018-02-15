@@ -70,13 +70,6 @@ class Axe
         return $this->axe_id;
     }
 
-    /**
-     * @param mixed $axe_id
-     */
-    public function setAxeId($axe_id)
-    {
-        $this->axe_id = $axe_id;
-    }
 
     /**
      * @return mixed

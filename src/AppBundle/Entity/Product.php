@@ -77,13 +77,6 @@ class Product
         return $this->product_id;
     }
 
-    /**
-     * @param mixed $product_id
-     */
-    public function setProductId($product_id)
-    {
-        $this->product_id = $product_id;
-    }
 
     /**
      * @return mixed
@@ -149,7 +142,68 @@ class Product
         $this->axe = $axe;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
 
+    /**
+     * @param mixed $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
 
+    /**
+     * @return mixed
+     */
+    public function getFeatured()
+    {
+        return $this->featured;
+    }
+
+    /**
+     * @param mixed $featured
+     */
+    public function setFeatured($featured)
+    {
+        $this->featured = $featured;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param mixed $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIntro()
+    {
+        return $this->intro;
+    }
+
+    /**
+     * @param mixed $intro
+     */
+    public function setIntro($intro)
+    {
+        $this->intro = $intro;
+    }
 
 }
