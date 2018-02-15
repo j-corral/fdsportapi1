@@ -21,6 +21,11 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
+define('SHOP_MAN', 1);
+define('SHOP_WOOMAN', 2);
+define('SHOP_ACCESSORIES', 3);
+define('SHOP_EQUIPMENT', 4);
+
 class ProductController extends ControllerBase {
 
     /**
@@ -39,6 +44,110 @@ class ProductController extends ControllerBase {
         $em = $this->getDoctrine()->getManager();
 
         $products = $em->getRepository(Product::class)->findAll();
+
+        if (empty($products)) {
+            throw $this->getProductNotFoundException();
+        }
+
+
+        return $products;
+    }
+
+
+
+    /**
+     * @ApiDoc(
+     *      resource=true, section="Product",
+     *      description="Get the products for man",
+     *      output= { "class"=Product::class, "collection"=true, "groups"={"base", "product"} }
+     * )
+     *
+     * @Rest\View(serializerGroups={"base", "product", "axe"})
+     * @Rest\Get("/products/man")
+     * @param Request $request
+     * @return array
+     */
+    public function getProductsManAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+
+        $products = $em->getRepository(Product::class)->findBy(['type' => SHOP_MAN]);
+
+        if (empty($products)) {
+            throw $this->getProductNotFoundException();
+        }
+
+
+        return $products;
+    }
+
+
+    /**
+     * @ApiDoc(
+     *      resource=true, section="Product",
+     *      description="Get the products for wooman",
+     *      output= { "class"=Product::class, "collection"=true, "groups"={"base", "product"} }
+     * )
+     *
+     * @Rest\View(serializerGroups={"base", "product", "axe"})
+     * @Rest\Get("/products/wooman")
+     * @param Request $request
+     * @return array
+     */
+    public function getProductsWoomanAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+
+        $products = $em->getRepository(Product::class)->findBy(['type' => SHOP_WOOMAN]);
+
+        if (empty($products)) {
+            throw $this->getProductNotFoundException();
+        }
+
+
+        return $products;
+    }
+
+
+    /**
+     * @ApiDoc(
+     *      resource=true, section="Product",
+     *      description="Get the products accessories",
+     *      output= { "class"=Product::class, "collection"=true, "groups"={"base", "product"} }
+     * )
+     *
+     * @Rest\View(serializerGroups={"base", "product", "axe"})
+     * @Rest\Get("/products/accessories")
+     * @param Request $request
+     * @return array
+     */
+    public function getProductsAccessoriesAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+
+        $products = $em->getRepository(Product::class)->findBy(['type' => SHOP_ACCESSORIES]);
+
+        if (empty($products)) {
+            throw $this->getProductNotFoundException();
+        }
+
+
+        return $products;
+    }
+
+    /**
+     * @ApiDoc(
+     *      resource=true, section="Product",
+     *      description="Get the products equipment",
+     *      output= { "class"=Product::class, "collection"=true, "groups"={"base", "product"} }
+     * )
+     *
+     * @Rest\View(serializerGroups={"base", "product", "axe"})
+     * @Rest\Get("/products/equipment")
+     * @param Request $request
+     * @return array
+     */
+    public function getProductsEquipmentAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+
+        $products = $em->getRepository(Product::class)->findBy(['type' => SHOP_EQUIPMENT]);
 
         if (empty($products)) {
             throw $this->getProductNotFoundException();
