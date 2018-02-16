@@ -78,18 +78,26 @@ class UserController extends ControllerBase {
     }
 
 
+
     /**
      * @ApiDoc(
      *      resource=true, section="User",
      *      description="Create new user",
-     *      output= { "class"=User::class, "collection"=false, "groups"={"base", "user"} }
+     *      input={"class"=User::class, "name"=""},
+     *      statusCodes = {
+     *          201 = "Created",
+     *          400 = "Bad Request"
+     *      },
+     *      responseMap={
+     *          201 = { "class"=User::class, "groups"={"base", "user"}},
+     *          400 = { "class"=User::class, "fos_rest_form_errors"=false, "name" = ""}
+     *      }
      * )
      *
-     * @Rest\View(serializerGroups={"base", "user"})
+     * @Rest\View(statusCode=Response::HTTP_CREATED, serializerGroups={"base", "user"})
      * @Rest\Post("/users/create")
      * @param Request $request
-     *
-     * @return object
+     * @return User
      * @throws \Exception
      */
     public function postCreateUserAction(Request $request) {
@@ -104,15 +112,12 @@ class UserController extends ControllerBase {
         $user = new User();
         $user->setFirstname('user_' . $data['cookie']['name']);
 
-
         $cookie = new Cookie();
         $cookie->setName($data['cookie']['name']);
         $user->setCookie($cookie);
 
-
         $axe = new Axe();
         $user->setAxe($axe);
-        $user->
 
         $em->persist($user);
         $em->flush();
