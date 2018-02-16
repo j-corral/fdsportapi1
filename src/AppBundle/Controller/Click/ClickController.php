@@ -112,11 +112,7 @@ class ClickController extends ControllerBase {
             throw new \Exception('User not found !');
         }
 
-
         $userAxe = $user->getAxe();
-
-        // todo : calculate user axe
-
 
         // Get product
         $product = $em->getRepository(Product::class)->find($request->get('productId'));
@@ -127,7 +123,46 @@ class ClickController extends ControllerBase {
 
         $productAxe = $product->getAxe();
 
-        // todo : calculate product axe
+        // calculate axes
+        if($product->isFixed) {
+            if($userAxe->male == 0 && $userAxe->female == 0 && $userAxe->age == 0) { // if userAxe is not set
+                $userAxe = $productAxe; // userAxe take productAxe properties
+            }
+            else {
+                $userAxe->male = ($userAxe->male + $productAxe->male) / 2;
+                $userAxe->female = ($userAxe->female + $productAxe->female) / 2;
+                $userAxe->age = ($userAxe->age + $productAxe->age) / 2;
+                $userAxe->csp = ($userAxe->csp + $productAxe->csp) / 2;
+
+                //TODO: assign value to userAxe with means in clicks
+                if($productAxe->brand != null)
+                    $userAxe->brand = $productAxe->brand;
+                if($productAxe->city != null)
+                    $userAxe->city = $productAxe->city;
+                if($productAxe->sport != null)
+                    $userAxe->sport = $productAxe->sport;
+            }
+        }
+        else if($userAxe->male != 0 && $userAxe->female != 0 && $userAxe->age != 0) { // if userAxe is set and product is floating
+
+            if($productAxe->male == 0 && $productAxe->female == 0 && $productAxe->age == 0) { // if product axe is not set
+                $productAxe = $userAxe; // productAxe take userAxe properties
+            }
+            else {
+                $productAxe->male = ($productAxe->male + $userAxe->male) / 2;
+                $productAxe->female = ($productAxe->female + $userAxe->female) / 2;
+                $productAxe->age = ($productAxe->age + $userAxe->age) / 2;
+                $productAxe->csp = ($productAxe->csp + $userAxe->csp) / 2;
+
+                //TODO: assign value to productAxe with means in clicks
+                if($userAxe->brand != null)
+                    $productAxe->brand = $userAxe->brand;
+                if($userAxe->city != null)
+                    $productAxe->city = $userAxe->city;
+                if($userAxe->sport != null)
+                    $productAxe->sport = $userAxe->sport;
+            }
+        }
 
         // update user Axe
         $user->setAxe($userAxe);
@@ -180,11 +215,7 @@ class ClickController extends ControllerBase {
             throw new \Exception('User not found !');
         }
 
-
         $userAxe = $user->getAxe();
-
-        // todo : calculate user axe
-
 
         // Get ticket
         $ticket = $em->getRepository(Ticket::class)->find($request->get('ticketId'));
@@ -195,7 +226,46 @@ class ClickController extends ControllerBase {
 
         $ticketAxe = $ticket->getAxe();
 
-        // todo : calculate ticket axe
+        // calculate axes
+        if($ticket->isFixed) {
+            if($userAxe->male == 0 && $userAxe->female == 0 && $userAxe->age == 0) { // if userAxe is not set
+                $userAxe = $ticketAxe; // userAxe take $ticketAxe properties
+            }
+            else {
+                $userAxe->male = ($userAxe->male + $ticketAxe->male) / 2;
+                $userAxe->female = ($userAxe->female + $ticketAxe->female) / 2;
+                $userAxe->age = ($userAxe->age + $ticketAxe->age) / 2;
+                $userAxe->csp = ($userAxe->csp + $ticketAxe->csp) / 2;
+
+                //TODO: assign value to userAxe with means in clicks
+                if($ticketAxe->brand != null)
+                    $userAxe->brand = $ticketAxe->brand;
+                if($ticketAxe->city != null)
+                    $userAxe->city = $ticketAxe->city;
+                if($ticketAxe->sport != null)
+                    $userAxe->sport = $ticketAxe->sport;
+            }
+        }
+        else if($userAxe->male != 0 && $userAxe->female != 0 && $userAxe->age != 0) { // if userAxe is set and ticket is floating
+
+            if($ticketAxe->male == 0 && $ticketAxe->female == 0 && $ticketAxe->age == 0) { // if ticket axe is not set
+                $ticketAxe = $userAxe; // $ticketAxe take userAxe properties
+            }
+            else {
+                $ticketAxe->male = ($ticketAxe->male + $userAxe->male) / 2;
+                $ticketAxe->female = ($ticketAxe->female + $userAxe->female) / 2;
+                $ticketAxe->age = ($ticketAxe->age + $userAxe->age) / 2;
+                $ticketAxe->csp = ($ticketAxe->csp + $userAxe->csp) / 2;
+
+                //TODO: assign value to ticketAxe with means in clicks
+                if($userAxe->brand != null)
+                    $ticketAxe->brand = $userAxe->brand;
+                if($userAxe->city != null)
+                    $ticketAxe->city = $userAxe->city;
+                if($userAxe->sport != null)
+                    $ticketAxe->sport = $userAxe->sport;
+            }
+        }
 
         // update user Axe
         $user->setAxe($userAxe);
