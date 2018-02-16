@@ -9,6 +9,7 @@
 namespace AppBundle\Controller\Click;
 
 // Required dependencies for Controller and Annotations
+use AppBundle\Entity\Axe;
 use AppBundle\Entity\Click;
 use AppBundle\Entity\Product;
 use AppBundle\Entity\Ticket;
@@ -114,6 +115,10 @@ class ClickController extends ControllerBase {
 
         $userAxe = $user->getAxe();
 
+        if(is_null($userAxe)) {
+            throw new \Exception('User Axe does not exist !');
+        }
+
         // Get product
         $product = $em->getRepository(Product::class)->find($request->get('productId'));
 
@@ -123,44 +128,61 @@ class ClickController extends ControllerBase {
 
         $productAxe = $product->getAxe();
 
+        if(is_null($productAxe)) {
+            // copy user Axe into product Axe
+            $productAxe = new Axe();
+            $productAxe->setAge($userAxe->getAge());
+            $productAxe->setBrand($userAxe->getBrand());
+            $productAxe->setCity($userAxe->getCity());
+            $productAxe->setCsp($userAxe->getCsp());
+            $productAxe->setFemale($userAxe->getFemale());
+            $productAxe->setMale($userAxe->getMale());
+            $productAxe->setSport($userAxe->getSport());
+            $em->persist($productAxe);
+            $product->setAxe($productAxe);
+            $em->merge($product);
+            $em->flush();
+            return $user;
+        }
+
         // calculate axes
-        if($product->isFixed) {
-            if($userAxe->male == 0 && $userAxe->female == 0 && $userAxe->age == 0) { // if userAxe is not set
+        if($product->getisFixed()) {
+            if($userAxe->getMale() == 0 && $userAxe->getFemale() == 0 && $userAxe->getAge() == 0) { // if userAxe is not set
                 $userAxe = $productAxe; // userAxe take productAxe properties
             }
             else {
-                $userAxe->male = ($userAxe->male + $productAxe->male) / 2;
-                $userAxe->female = ($userAxe->female + $productAxe->female) / 2;
-                $userAxe->age = ($userAxe->age + $productAxe->age) / 2;
-                $userAxe->csp = ($userAxe->csp + $productAxe->csp) / 2;
+                $userAxe->setMale(($userAxe->getMale() + $productAxe->getMale()) / 2);
+                $userAxe->setFemale(($userAxe->getFemale() + $productAxe->getFemale()) / 2);
+                $userAxe->setAge(($userAxe->getAge() + $productAxe->getAge()) / 2);
+                $userAxe->setCsp(($userAxe->getCsp() + $productAxe->getCsp()) / 2);
 
                 //TODO: assign value to userAxe with means in clicks
-                if($productAxe->brand != null)
-                    $userAxe->brand = $productAxe->brand;
-                if($productAxe->city != null)
-                    $userAxe->city = $productAxe->city;
-                if($productAxe->sport != null)
-                    $userAxe->sport = $productAxe->sport;
+                if($productAxe->getBrand() != null)
+                    $userAxe->setBrand($productAxe->getBrand());
+                if($productAxe->getCity() != null)
+                    $userAxe->setCity($productAxe->getCity());
+                if($productAxe->getSport() != null)
+                    $userAxe->setSport($productAxe->getSport());
             }
         }
-        else if($userAxe->male != 0 && $userAxe->female != 0 && $userAxe->age != 0) { // if userAxe is set and product is floating
+        else if($userAxe->getMale() != 0 && $userAxe->getFemale() != 0 && $userAxe->getAge() != 0) { // if userAxe is set and product is floating
 
-            if($productAxe->male == 0 && $productAxe->female == 0 && $productAxe->age == 0) { // if product axe is not set
+            if($productAxe->getMale() == 0 && $productAxe->getFemale() == 0 && $productAxe->getAge() == 0) { // if product axe is not set
                 $productAxe = $userAxe; // productAxe take userAxe properties
             }
             else {
-                $productAxe->male = ($productAxe->male + $userAxe->male) / 2;
-                $productAxe->female = ($productAxe->female + $userAxe->female) / 2;
-                $productAxe->age = ($productAxe->age + $userAxe->age) / 2;
-                $productAxe->csp = ($productAxe->csp + $userAxe->csp) / 2;
+                $productAxe->setMale(($productAxe->getMale() + $userAxe->getMale()) / 2);
+                $productAxe->setFemale(($productAxe->getFemale() + $userAxe->getFemale()) / 2);
+                $productAxe->setAge(($productAxe->getAge() + $userAxe->getAge()) / 2);
+                $productAxe->setCsp(($productAxe->getCsp() + $userAxe->getCsp()) / 2);
 
                 //TODO: assign value to productAxe with means in clicks
-                if($userAxe->brand != null)
-                    $productAxe->brand = $userAxe->brand;
-                if($userAxe->city != null)
-                    $productAxe->city = $userAxe->city;
-                if($userAxe->sport != null)
-                    $productAxe->sport = $userAxe->sport;
+                if($userAxe->getBrand() != null)
+                    $productAxe->setBrand($userAxe->getBrand());
+                if($userAxe->getCity() != null)
+                    $productAxe->setCity($userAxe->getCity());
+                if($userAxe->getSport() != null)
+                    $productAxe->setSport($userAxe->getSport());
             }
         }
 
@@ -171,8 +193,8 @@ class ClickController extends ControllerBase {
         $product->setAxe($productAxe);
 
         // save product and user in db
-        $em->persist($user);
-        $em->persist($product);
+        $em->merge($user);
+        $em->merge($product);
         $em->flush();
 
         // create click entry
@@ -217,6 +239,10 @@ class ClickController extends ControllerBase {
 
         $userAxe = $user->getAxe();
 
+        if(is_null($userAxe)) {
+            throw new \Exception('User Axe does not exist !');
+        }
+
         // Get ticket
         $ticket = $em->getRepository(Ticket::class)->find($request->get('ticketId'));
 
@@ -226,44 +252,67 @@ class ClickController extends ControllerBase {
 
         $ticketAxe = $ticket->getAxe();
 
+
+        if(is_null($ticketAxe)) {
+            // copy user Axe into ticket Axe
+            $ticketAxe = new Axe();
+            $ticketAxe->setAge($userAxe->getAge());
+            $ticketAxe->setBrand($userAxe->getBrand());
+            $ticketAxe->setCity($userAxe->getCity());
+            $ticketAxe->setCsp($userAxe->getCsp());
+            $ticketAxe->setFemale($userAxe->getFemale());
+            $ticketAxe->setMale($userAxe->getMale());
+            $ticketAxe->setSport($userAxe->getSport());
+            $em->persist($ticketAxe);
+            $ticket->setAxe($ticketAxe);
+            $em->merge($ticket);
+            $em->flush();
+            return $user;
+        }
+
+
         // calculate axes
-        if($ticket->isFixed) {
-            if($userAxe->male == 0 && $userAxe->female == 0 && $userAxe->age == 0) { // if userAxe is not set
+        /*if($ticket->getIsFixed()) {
+            if($userAxe->getMale() == 0 && $userAxe->getFemale() == 0 && $userAxe->getAge() == 0) { // if userAxe is not set
                 $userAxe = $ticketAxe; // userAxe take $ticketAxe properties
             }
             else {
-                $userAxe->male = ($userAxe->male + $ticketAxe->male) / 2;
-                $userAxe->female = ($userAxe->female + $ticketAxe->female) / 2;
-                $userAxe->age = ($userAxe->age + $ticketAxe->age) / 2;
-                $userAxe->csp = ($userAxe->csp + $ticketAxe->csp) / 2;
+                $userAxe->setMale(($userAxe->getMale() + $ticketAxe->getMale()) / 2);
+                $userAxe->setFemale(($userAxe->getFemale() + $ticketAxe->getFemale()) / 2);
+                $userAxe->setAge(($userAxe->getAge() + $ticketAxe->getAge()) / 2);
+                $userAxe->setCsp(($userAxe->getCsp() + $ticketAxe->getCsp()) / 2);
 
                 //TODO: assign value to userAxe with means in clicks
-                if($ticketAxe->brand != null)
-                    $userAxe->brand = $ticketAxe->brand;
-                if($ticketAxe->city != null)
-                    $userAxe->city = $ticketAxe->city;
-                if($ticketAxe->sport != null)
-                    $userAxe->sport = $ticketAxe->sport;
+                if($ticketAxe->getBrand() != null)
+                    $userAxe->setBrand($ticketAxe->getBrand());
+                if($ticketAxe->getCity() != null)
+                    $userAxe->setCity($ticketAxe->getCity());
+                if($ticketAxe->getSport() != null)
+                    $userAxe->setSport($ticketAxe->getSport());
             }
         }
-        else if($userAxe->male != 0 && $userAxe->female != 0 && $userAxe->age != 0) { // if userAxe is set and ticket is floating
+        else*/
+        if($userAxe->getMale() != 0 && $userAxe->getFemale() != 0 && $userAxe->getAge() != 0) { // if userAxe is set and ticket is floating
 
-            if($ticketAxe->male == 0 && $ticketAxe->female == 0 && $ticketAxe->age == 0) { // if ticket axe is not set
-                $ticketAxe = $userAxe; // $ticketAxe take userAxe properties
+            if($ticketAxe->getMale() == 0 && $ticketAxe->getFemale() == 0 && $ticketAxe->getAge() == 0) { // if ticket axe is not set
+                // $ticketAxe take userAxe properties
+                $ticketAxe->setMale($userAxe->getMale());
+                $ticketAxe->setFemale($userAxe->getFemale());
+                $ticketAxe->setAge($userAxe->getAge());
             }
             else {
-                $ticketAxe->male = ($ticketAxe->male + $userAxe->male) / 2;
-                $ticketAxe->female = ($ticketAxe->female + $userAxe->female) / 2;
-                $ticketAxe->age = ($ticketAxe->age + $userAxe->age) / 2;
-                $ticketAxe->csp = ($ticketAxe->csp + $userAxe->csp) / 2;
+                $ticketAxe->setMale(($ticketAxe->getMale() + $userAxe->getMale()) / 2);
+                $ticketAxe->setFemale(($ticketAxe->getFemale() + $userAxe->getFemale()) / 2);
+                $ticketAxe->setAge(($ticketAxe->getAge() + $userAxe->getAge()) / 2);
+                $ticketAxe->setCsp(($ticketAxe->getCsp() + $userAxe->getCsp()) / 2);
 
                 //TODO: assign value to ticketAxe with means in clicks
-                if($userAxe->brand != null)
-                    $ticketAxe->brand = $userAxe->brand;
-                if($userAxe->city != null)
-                    $ticketAxe->city = $userAxe->city;
-                if($userAxe->sport != null)
-                    $ticketAxe->sport = $userAxe->sport;
+                if($userAxe->getBrand() != null)
+                    $ticketAxe->setBrand($userAxe->getBrand());
+                if($userAxe->getCity() != null)
+                    $ticketAxe->setCity($userAxe->getCity());
+                if($userAxe->getSport() != null)
+                    $ticketAxe->setSport($userAxe->getSport());
             }
         }
 
@@ -274,8 +323,8 @@ class ClickController extends ControllerBase {
         $ticket->setAxe($ticketAxe);
 
         // save ticket and user in db
-        $em->persist($user);
-        $em->persist($ticket);
+        $em->merge($user);
+        $em->merge($ticket);
         $em->flush();
 
         // create click entry
