@@ -10,6 +10,7 @@ namespace AppBundle\Controller\Ticket;
 
 // Required dependencies for Controller and Annotations
 use AppBundle\Entity\Ticket;
+use AppBundle\Repository\TicketRepository;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use \AppBundle\Controller\ControllerBase;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -38,7 +39,34 @@ class TicketController extends ControllerBase {
     public function getTicketsAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
 
-        $tickets = $em->getRepository(Ticket::class)->findAll();
+        $tickets = $em->getRepository(Ticket::class)->findAvailable();
+
+        if (empty($tickets)) {
+            throw $this->getTicketNotFoundException();
+        }
+
+
+        return $tickets;
+    }
+
+    /**
+     * @ApiDoc(
+     *      resource=true, section="Ticket",
+     *      description="Get shortly Tickets",
+     *      output= { "class"=Ticket::class, "collection"=true, "groups"={"base", "ticket"} }
+     * )
+     *
+     * @Rest\View(serializerGroups={"base", "ticket"})
+     * @Rest\Get("/tickets/shortly/{limit}")
+     * @param Request $request
+     * @return array
+     */
+    public function getLatestTicketsAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+
+        $limit = $request->get('limit');
+
+        $tickets = $em->getRepository(Ticket::class)->findAvailable($limit);
 
         if (empty($tickets)) {
             throw $this->getTicketNotFoundException();
