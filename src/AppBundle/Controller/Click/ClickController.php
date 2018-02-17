@@ -11,6 +11,7 @@ namespace AppBundle\Controller\Click;
 // Required dependencies for Controller and Annotations
 use AppBundle\Entity\Axe;
 use AppBundle\Entity\Click;
+use AppBundle\Entity\Cookie;
 use AppBundle\Entity\Product;
 use AppBundle\Entity\Ticket;
 use AppBundle\Entity\User;
@@ -83,6 +84,49 @@ class ClickController extends ControllerBase {
     /**
      * @ApiDoc(
      *      resource=true, section="Click",
+     *      description="Get click by user cookie name",
+     *      output= { "class"=Click::class, "collection"=false, "groups"={"base", "click"} }
+     * )
+     *
+     * @Rest\View(serializerGroups={"base", "click"})
+     * @Rest\Get("/clicks/user/{cookieName}")
+     * @param Request $request
+     *
+     * @return object
+     * @throws \Exception
+     */
+    public function getClickByUserAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+
+        $cookieName = $request->get('cookieName');
+
+        $cookie = $em->getRepository(Cookie::class)->findOneByName($cookieName);
+
+        if(empty($cookie)) {
+            throw new \Exception('Cookie not found !');
+        }
+
+        // Get user
+        $user = $em->getRepository(User::class)->findOneByCookie($cookie);
+
+        if(empty($user)) {
+            throw new \Exception('User not found !');
+        }
+
+        $click = $em->getRepository(Click::class)->findBy([
+            "user" => $user
+        ], ["click_id" => "DESC"]);
+
+        if (empty($click)) {
+            throw $this->getClickNotFoundException();
+        }
+
+        return $click;
+    }
+
+    /**
+     * @ApiDoc(
+     *      resource=true, section="Click",
      *      description="Update User and product Axe - Add new entry into clicks",
      *      output= { "class"=User::class, "collection"=false, "groups"={"base", "user"} }
      * )
@@ -106,8 +150,15 @@ class ClickController extends ControllerBase {
 
         $cookieName = $data['cookie']['name'];
 
+        $cookie = $em->getRepository(Cookie::class)->findOneByName($cookieName);
+
+        if(empty($cookie)) {
+            throw new \Exception('Cookie not found !');
+        }
+
         // Get user
-        $user = $em->getRepository(User::class)->findOneBy(["firstname" => 'user_' . $cookieName]);
+        $user = $em->getRepository(User::class)->findOneByCookie($cookie);
+
 
         if(empty($user)) {
             throw new \Exception('User not found !');
@@ -230,8 +281,15 @@ class ClickController extends ControllerBase {
 
         $cookieName = $data['cookie']['name'];
 
+        $cookie = $em->getRepository(Cookie::class)->findOneByName($cookieName);
+
+        if(empty($cookie)) {
+            throw new \Exception('Cookie not found !');
+        }
+
         // Get user
-        $user = $em->getRepository(User::class)->findOneBy(["firstname" => 'user_' . $cookieName]);
+        $user = $em->getRepository(User::class)->findOneByCookie($cookie);
+
 
         if(empty($user)) {
             throw new \Exception('User not found !');
