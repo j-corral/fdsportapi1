@@ -43,7 +43,35 @@ class ProductController extends ControllerBase {
     public function getProductsAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
 
-        $products = $em->getRepository(Product::class)->findAll();
+        $products = $em->getRepository(Product::class)->findNewest();
+
+        if (empty($products)) {
+            throw $this->getProductNotFoundException();
+        }
+
+
+        return $products;
+    }
+
+
+    /**
+     * @ApiDoc(
+     *      resource=true, section="Product",
+     *      description="Get newest products",
+     *      output= { "class"=Product::class, "collection"=true, "groups"={"base", "product"} }
+     * )
+     *
+     * @Rest\View(serializerGroups={"base", "product", "axe"})
+     * @Rest\Get("/products/newest/{limit}")
+     * @param Request $request
+     * @return array
+     */
+    public function getNewestProductsAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+
+        $limit = $request->get('limit');
+
+        $products = $em->getRepository(Product::class)->findNewest($limit);
 
         if (empty($products)) {
             throw $this->getProductNotFoundException();
