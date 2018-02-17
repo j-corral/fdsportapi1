@@ -47,7 +47,45 @@ class CityController extends ControllerBase {
             "Lyon, France",
             "Bordeaux, France",
             "Marseille, France",
-            "Aubagne, France",
+            "Toulon, France",
+        );
+
+        // $maps = new MAPSAPI($this->getParameter('googleApiKey'));
+        //return $maps->getCitiesByMaxDistance($city, $destinations, $distance);
+
+        return $this->get('maps_api')->getCitiesByMaxDistance($city,$destinations,$distance);
+    }
+
+
+    /**
+     * @ApiDoc(
+     *      resource=true, section="City",
+     *      description="Get nearest city",
+     *      output= { "class"="", "collection"=false, "groups"={"base"} }
+     * )
+     *
+     * @Rest\View(serializerGroups={"base"})
+     * @Rest\Get("/city/nearest/{city}")
+     * @QueryParam(name="distance", requirements="\d+", default="50000", description="Max distance to search for, in meters")
+     * @param Request $request
+     * @param ParamFetcher $paramFetcher
+     * @return array|mixed
+     */
+    public function getNearestCityAction(Request $request, ParamFetcher $paramFetcher) {
+
+        $city = $request->get('city');
+
+        $distance = $paramFetcher->get('distance');
+
+        $destinations = array(
+            "Lille, France",
+            "Strasbourg, France",
+            "Paris, France",
+            "Nantes, France",
+            "Lyon, France",
+            "Bordeaux, France",
+            "Marseille, France",
+            "Toulon, France",
         );
 
         // $maps = new MAPSAPI($this->getParameter('googleApiKey'));
