@@ -202,18 +202,46 @@ class ClickController extends ControllerBase {
                 $userAxe = $productAxe; // userAxe take productAxe properties
             }
             else {
-                $userAxe->setMale(($userAxe->getMale() + $productAxe->getMale()) / 2);
-                $userAxe->setFemale(($userAxe->getFemale() + $productAxe->getFemale()) / 2);
-                $userAxe->setAge(($userAxe->getAge() + $productAxe->getAge()) / 2);
-                $userAxe->setCsp(($userAxe->getCsp() + $productAxe->getCsp()) / 2);
+                $clicks = getClickByUserAction($request); // Get array with user clicks
 
-                //TODO: assign value to userAxe with means in clicks
-                if($productAxe->getBrand() != null)
-                    $userAxe->setBrand($productAxe->getBrand());
-                if($productAxe->getCity() != null)
-                    $userAxe->setCity($productAxe->getCity());
-                if($productAxe->getSport() != null)
-                    $userAxe->setSport($productAxe->getSport());
+                $maleSum = 0;
+                $femaleSum = 0;
+                $ageSum = 0;
+                $cspSum = 0;
+                foreach ($clicks as $click) {
+                    $maleSum += $click->getProduct()->getAxe()->getMale();
+                    $femaleSum += $click->getProduct()->getAxe()->getFemale();
+                    $ageSum += $click->getProduct()->getAxe()->getAge();
+                    $cspSum += $click->getProduct()->getAxe()->getCsp();
+                }
+                $userAxe->setMale($maleSum / $clicks.size());
+                $userAxe->setFemale($femaleSum / $clicks.size());
+                $userAxe->setAge($ageSum / $clicks.size());
+                $userAxe->setCsp($cspSum / $clicks.size());
+
+                // On compte le nombre d'occurences de chacune des chaines de caractères
+                $countsBrand = array();
+                $countsCity = array();
+                $countsSport = array();
+                foreach ($clicks as $click) {
+                    $countsBrand[$click->getProduct()->getAxe()->getBrand()]++;
+                    $countsCity[$click->getProduct()->getAxe()->getCity()]++;
+                    $countsSport[$click->getProduct()->getAxe()->getSport()]++;
+                }
+                // On ordonne par ordre croissant
+                sort($countsBrand, SORT_NUMERIC);
+                sort($countsCity, SORT_NUMERIC);
+                sort($countsSport, SORT_NUMERIC);
+
+                // On récupère la première clé qui correspond au plus grand count
+                $brand = array_keys($countsBrand, end($countsBrand))[0];
+                $city = array_keys($countsCity, end($countsCity))[0];
+                $sport = array_keys($countsCity, end($countsCity))[0];
+
+                // On assigne les valeurs
+                $userAxe->setBrand($brand);
+                $userAxe->setCity($city);
+                $userAxe->setSport($sport);
             }
         }
         else if($userAxe->getMale() != 0 && $userAxe->getFemale() != 0 && $userAxe->getAge() != 0) { // if userAxe is set and product is floating
@@ -222,18 +250,46 @@ class ClickController extends ControllerBase {
                 $productAxe = $userAxe; // productAxe take userAxe properties
             }
             else {
-                $productAxe->setMale(($productAxe->getMale() + $userAxe->getMale()) / 2);
-                $productAxe->setFemale(($productAxe->getFemale() + $userAxe->getFemale()) / 2);
-                $productAxe->setAge(($productAxe->getAge() + $userAxe->getAge()) / 2);
-                $productAxe->setCsp(($productAxe->getCsp() + $userAxe->getCsp()) / 2);
+                $clicks = getClickByProductAction($request); // Get array with product clicks
 
-                //TODO: assign value to productAxe with means in clicks
-                if($userAxe->getBrand() != null)
-                    $productAxe->setBrand($userAxe->getBrand());
-                if($userAxe->getCity() != null)
-                    $productAxe->setCity($userAxe->getCity());
-                if($userAxe->getSport() != null)
-                    $productAxe->setSport($userAxe->getSport());
+                $maleSum = 0;
+                $femaleSum = 0;
+                $ageSum = 0;
+                $cspSum = 0;
+                foreach ($clicks as $click) {
+                    $maleSum += $click->getUser()->getAxe()->getMale();
+                    $femaleSum += $click->getUser()->getAxe()->getFemale();
+                    $ageSum += $click->getUser()->getAxe()->getAge();
+                    $cspSum += $click->getUser()->getAxe()->getCsp();
+                }
+                $productAxe->setMale($maleSum / $clicks.size());
+                $productAxe->setFemale($femaleSum / $clicks.size());
+                $productAxe->setAge($ageSum / $clicks.size());
+                $productAxe->setCsp($cspSum / $clicks.size());
+
+                // On compte le nombre d'occurences de chacune des chaines de caractères
+                $countsBrand = array();
+                $countsCity = array();
+                $countsSport = array();
+                foreach ($clicks as $click) {
+                    $countsBrand[$click->getUser()->getAxe()->getBrand()]++;
+                    $countsCity[$click->getUser()->getAxe()->getCity()]++;
+                    $countsSport[$click->getUser()->getAxe()->getSport()]++;
+                }
+                // On ordonne par ordre croissant
+                sort($countsBrand, SORT_NUMERIC);
+                sort($countsCity, SORT_NUMERIC);
+                sort($countsSport, SORT_NUMERIC);
+
+                // On récupère la première clé qui correspond au plus grand count
+                $brand = array_keys($countsBrand, end($countsBrand))[0];
+                $city = array_keys($countsCity, end($countsCity))[0];
+                $sport = array_keys($countsCity, end($countsCity))[0];
+
+                // On assigne les valeurs
+                $productAxe->setBrand($brand);
+                $productAxe->setCity($city);
+                $productAxe->setSport($sport);
             }
         }
 
@@ -335,18 +391,47 @@ class ClickController extends ControllerBase {
                 $userAxe = $ticketAxe; // userAxe take $ticketAxe properties
             }
             else {
-                $userAxe->setMale(($userAxe->getMale() + $ticketAxe->getMale()) / 2);
-                $userAxe->setFemale(($userAxe->getFemale() + $ticketAxe->getFemale()) / 2);
-                $userAxe->setAge(($userAxe->getAge() + $ticketAxe->getAge()) / 2);
-                $userAxe->setCsp(($userAxe->getCsp() + $ticketAxe->getCsp()) / 2);
+                $clicks = getClickByUserAction($request); // Get array with user clicks
 
-                //TODO: assign value to userAxe with means in clicks
-                if($ticketAxe->getBrand() != null)
-                    $userAxe->setBrand($ticketAxe->getBrand());
-                if($ticketAxe->getCity() != null)
-                    $userAxe->setCity($ticketAxe->getCity());
-                if($ticketAxe->getSport() != null)
-                    $userAxe->setSport($ticketAxe->getSport());
+                $maleSum = 0;
+                $femaleSum = 0;
+                $ageSum = 0;
+                $cspSum = 0;
+                foreach ($clicks as $click) {
+                    $maleSum += $click->getTicket()->getAxe()->getMale();
+                    $femaleSum += $click->getTicket()->getAxe()->getFemale();
+                    $ageSum += $click->getTicket()->getAxe()->getAge();
+                    $cspSum += $click->getTicket()->getAxe()->getCsp();
+                }
+
+                $userAxe->setMale($maleSum / $clicks.size());
+                $userAxe->setFemale($femaleSum / $clicks.size());
+                $userAxe->setAge($ageSum / $clicks.size());
+                $userAxe->setCsp($cspSum / $clicks.size());
+
+                 // On compte le nombre d'occurences de chacune des chaines de caractères
+                $countsBrand = array();
+                $countsCity = array();
+                $countsSport = array();
+                foreach ($clicks as $click) {
+                    $countsBrand[$click->getTicket()->getAxe()->getBrand()]++;
+                    $countsCity[$click->getTicket()->getAxe()->getCity()]++;
+                    $countsSport[$click->getTicket()->getAxe()->getSport()]++;
+                }
+                // On ordonne par ordre croissant
+                sort($countsBrand, SORT_NUMERIC);
+                sort($countsCity, SORT_NUMERIC);
+                sort($countsSport, SORT_NUMERIC);
+
+                // On récupère la première clé qui correspond au plus grand count
+                $brand = array_keys($countsBrand, end($countsBrand))[0];
+                $city = array_keys($countsCity, end($countsCity))[0];
+                $sport = array_keys($countsCity, end($countsCity))[0];
+
+                // On assigne les valeurs
+                $userAxe->setBrand($brand);
+                $userAxe->setCity($city);
+                $userAxe->setSport($sport);
             }
         }
         else*/
@@ -359,18 +444,46 @@ class ClickController extends ControllerBase {
                 $ticketAxe->setAge($userAxe->getAge());
             }
             else {
-                $ticketAxe->setMale(($ticketAxe->getMale() + $userAxe->getMale()) / 2);
-                $ticketAxe->setFemale(($ticketAxe->getFemale() + $userAxe->getFemale()) / 2);
-                $ticketAxe->setAge(($ticketAxe->getAge() + $userAxe->getAge()) / 2);
-                $ticketAxe->setCsp(($ticketAxe->getCsp() + $userAxe->getCsp()) / 2);
+                $clicks = getClickByTicketAction($request); // Get array with product clicks
 
-                //TODO: assign value to ticketAxe with means in clicks
-                if($userAxe->getBrand() != null)
-                    $ticketAxe->setBrand($userAxe->getBrand());
-                if($userAxe->getCity() != null)
-                    $ticketAxe->setCity($userAxe->getCity());
-                if($userAxe->getSport() != null)
-                    $ticketAxe->setSport($userAxe->getSport());
+                $maleSum = 0;
+                $femaleSum = 0;
+                $ageSum = 0;
+                $cspSum = 0;
+                foreach ($clicks as $click) {
+                    $maleSum += $click->getUser()->getAxe()->getMale();
+                    $femaleSum += $click->getUser()->getAxe()->getFemale();
+                    $ageSum += $click->getUser()->getAxe()->getAge();
+                    $cspSum += $click->getUser()->getAxe()->getCsp();
+                }
+                $ticketAxe->setMale($maleSum / $clicks.size());
+                $ticketAxe->setFemale($femaleSum / $clicks.size());
+                $ticketAxe->setAge($ageSum / $clicks.size());
+                $ticketAxe->setCsp($cspSum / $clicks.size());
+
+                // On compte le nombre d'occurences de chacune des chaines de caractères
+                $countsBrand = array();
+                $countsCity = array();
+                $countsSport = array();
+                foreach ($clicks as $click) {
+                    $countsBrand[$click->getUser()->getAxe()->getBrand()]++;
+                    $countsCity[$click->getUser()->getAxe()->getCity()]++;
+                    $countsSport[$click->getUser()->getAxe()->getSport()]++;
+                }
+                // On ordonne par ordre croissant
+                sort($countsBrand, SORT_NUMERIC);
+                sort($countsCity, SORT_NUMERIC);
+                sort($countsSport, SORT_NUMERIC);
+
+                // On récupère la première clé qui correspond au plus grand count
+                $brand = array_keys($countsBrand, end($countsBrand))[0];
+                $city = array_keys($countsCity, end($countsCity))[0];
+                $sport = array_keys($countsCity, end($countsCity))[0];
+
+                // On assigne les valeurs
+                $ticketAxe->setBrand($brand);
+                $ticketAxe->setCity($city);
+                $ticketAxe->setSport($sport);
             }
         }
 
