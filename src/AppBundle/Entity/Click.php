@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\ClickRepository")
  * @ORM\Table(name="click")
  */
 class Click
