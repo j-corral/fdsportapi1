@@ -10,6 +10,8 @@ namespace AppBundle\Controller\Product;
 
 // Required dependencies for Controller and Annotations
 use AppBundle\Entity\Product;
+use AppBundle\Entity\Cookie;
+use AppBundle\Entity\User;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use \AppBundle\Controller\ControllerBase;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -28,14 +30,20 @@ define('SHOP_EQUIPMENT', 4);
 
 class ProductController extends ControllerBase {
 
-    /*
-     * @param $products array of products, $user user to order with axes
-     * @return array
+    /**
+     * @param $products
+     * @param $user
+     * @param int $product_id
+     * @return mixed
      */
-    function orderProducts($products, $user) {
+    private function orderProducts($products, $user, $product_id = 0) {
         //NOTE: To change the criteria of sorting, you can change the order of foreach
         $toProcess = $products; // Array of products to sort
         $processed = array(); // Array of products sorted
+
+        if(empty($user) || empty($user->getAxe())) {
+            return $products;
+        }
 
         // Process male or female
         foreach ($toProcess as $key => $product) { // NOTE: Je n'ai pas oublié le cas où le male == female. Ces produits ne seront pas écartés par les 2 if et si les axes de l'utilisateur sont égaux, aucun des if n'écartera de produit
@@ -45,6 +53,18 @@ class ProductController extends ControllerBase {
                 $userMale = true;
             else if($user->getAxe()->getMale() < $user->getAxe()->getFemale())
                 $userFemale = true;
+
+
+            if(empty($product) || empty($product->getAxe())) {
+                continue;
+            }
+
+
+            // remove current product from suggests
+            if($product_id > 0 && $product->getProductId() == $product_id) {
+                unset($toProcess[$key]);
+            }
+
 
             if(($product->getAxe()->getMale() > $product->getAxe()->getFemale()) && $userFemale && !$userMale) { // If product is male and user is female
                 array_unshift($processed, $product); // We add this product to processed
@@ -58,6 +78,12 @@ class ProductController extends ControllerBase {
 
         // Process sports
         foreach ($toProcess as $key => $product) {
+
+            if(empty($product) || empty($product->getAxe()) || empty($product->getAxe()->getSport())) {
+                continue;
+            }
+
+
             if($product->getAxe()->getSport() != $user->getAxe()->getSport()) {
                 array_unshift($processed, $product); // We add this product to processed
                 unset($toProcess[$key]); // Remove the actual product
@@ -66,6 +92,11 @@ class ProductController extends ControllerBase {
 
         // Process age
         foreach ($toProcess as $key => $product) {
+
+            if(empty($product) || empty($product->getAxe()) || empty($product->getAxe()->getAge())) {
+                continue;
+            }
+
             $ageMargin = 0.9;
             if(($product->getAxe()->getAge() >= ($user->getAxe()->getAge() + $ageMargin)) && ($product->getAxe()->getAge() <= ($user->getAxe()->getAge() - $ageMargin))) { // If product age is not in user->age-0,9 <= product->age <= user->age+0,9
                 array_unshift($processed, $product); // We add this product to processed
@@ -75,6 +106,10 @@ class ProductController extends ControllerBase {
 
         // Process CSP
         foreach ($toProcess as $key => $product) {
+            if(empty($product) || empty($product->getAxe()) || empty($product->getAxe()->getCsp())) {
+                continue;
+            }
+
             $cspMargin = 10;
             if(($product->getAxe()->getCsp() >= ($user->getAxe()->getCsp() + $cspMargin)) && ($product->getAxe()->getCsp() <= ($user->getAxe()->getCsp() - $cspMargin))) { // If product csp is not in user->csp-10 <= product->age <= user->csp+10
                 array_unshift($processed, $product); // We add this product to processed
@@ -84,6 +119,10 @@ class ProductController extends ControllerBase {
 
         // Process brand
         foreach ($toProcess as $key => $product) {
+            if(empty($product) || empty($product->getAxe()) || empty($product->getAxe()->getBrand())) {
+                continue;
+            }
+
             if($product->getAxe()->getBrand() != $user->getAxe()->getBrand()) {
                 array_unshift($processed, $product); // We add this product to processed
                 unset($toProcess[$key]); // Remove the actual product
@@ -98,8 +137,8 @@ class ProductController extends ControllerBase {
 //            }
 //        }
 
-        $processed = $toProcess + $processed; // We add last elements in first positions
-        return $processed; // Return ordered array
+        //$processed = $toProcess + $processed; // We add last elements in first positions
+        return $toProcess; // Return ordered array
     }
 
     /**
@@ -151,6 +190,57 @@ class ProductController extends ControllerBase {
             throw $this->getProductNotFoundException();
         }
 
+
+        return $products;
+    }
+
+
+    /**
+     * @ApiDoc(
+     *      resource=true, section="Product",
+     *      description="Get suggested products",
+     *      output= { "class"=Product::class, "collection"=true, "groups"={"base", "product"} }
+     * )
+     *
+     * @Rest\View(serializerGroups={"base", "product", "axe"})
+     * @Rest\Get("/products/suggested/{cookie}")
+     * @QueryParam(name="product_id", requirements="\d+", default="0", description="product_id")
+     * @QueryParam(name="limit", requirements="\d+", default="0", description="max results")
+     * @param Request $request
+     * @param ParamFetcher $paramFetcher
+     * @return array
+     */
+    public function getSuggestedProductsAction(Request $request, ParamFetcher $paramFetcher) {
+        $em = $this->getDoctrine()->getManager();
+
+        $cookieName = $request->get('cookie');
+        $product_id = (int) $paramFetcher->get('product_id');
+        $limit = (int) $paramFetcher->get('limit');
+
+        $products = $em->getRepository(Product::class)->findAll();
+
+        if (empty($products)) {
+            throw $this->getProductNotFoundException();
+        }
+
+
+        $cookie = $em->getRepository(Cookie::class)->findOneByName($cookieName);
+
+        if(!empty($cookie)) {
+
+            // Get user
+            $user = $em->getRepository(User::class)->findOneByCookie($cookie);
+
+            if(!empty($user)) {
+                $products = $this->orderProducts($products, $user, $product_id);
+            }
+
+        }
+
+
+        if($limit && count($products) > $limit) {
+            $products = array_slice($products, 0, $limit);
+        }
 
         return $products;
     }
