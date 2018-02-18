@@ -262,7 +262,11 @@ class ProductController extends ControllerBase {
     public function getProductsManAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
 
-        $products = $em->getRepository(Product::class)->findBy(['type' => SHOP_MAN]);
+        $products = $em->getRepository(Product::class)->findBy([
+            'type' => SHOP_MAN
+        ], [
+            'product_id' => "DESC"
+        ]);
 
         if (empty($products)) {
             throw $this->getProductNotFoundException();
@@ -288,7 +292,11 @@ class ProductController extends ControllerBase {
     public function getProductsWoomanAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
 
-        $products = $em->getRepository(Product::class)->findBy(['type' => SHOP_WOOMAN]);
+        $products = $em->getRepository(Product::class)->findBy([
+            'type' => SHOP_WOOMAN
+        ], [
+            'product_id' => "DESC"
+        ]);
 
         if (empty($products)) {
             throw $this->getProductNotFoundException();
@@ -314,7 +322,11 @@ class ProductController extends ControllerBase {
     public function getProductsAccessoriesAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
 
-        $products = $em->getRepository(Product::class)->findBy(['type' => SHOP_ACCESSORIES]);
+        $products = $em->getRepository(Product::class)->findBy([
+            'type' => SHOP_ACCESSORIES
+        ], [
+            'product_id' => "DESC"
+        ]);
 
         if (empty($products)) {
             throw $this->getProductNotFoundException();
@@ -339,7 +351,11 @@ class ProductController extends ControllerBase {
     public function getProductsEquipmentAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
 
-        $products = $em->getRepository(Product::class)->findBy(['type' => SHOP_EQUIPMENT]);
+        $products = $em->getRepository(Product::class)->findBy([
+            'type' => SHOP_EQUIPMENT
+        ], [
+            'product_id' => "DESC"
+        ]);
 
         if (empty($products)) {
             throw $this->getProductNotFoundException();
